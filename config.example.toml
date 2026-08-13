@@ -1,0 +1,20 @@
+[enrichment]
+allow_network = false
+max_indicators_per_run = 50
+max_requests_per_provider = 25
+cache_enabled = true
+cache_ttl_hours = 24
+
+[providers.local]
+enabled = true
+
+[providers.rdap]
+enabled = false
+
+[providers.virustotal]
+enabled = false
+api_key_environment = "DARKINTEL_VT_API_KEY"
+
+[providers.abuseipdb]
+enabled = false
+api_key_environment = "DARKINTEL_ABUSEIPDB_API_KEY"

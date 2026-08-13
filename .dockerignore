@@ -1,0 +1,17 @@
+.git
+.github
+.venv
+__pycache__
+*.pyc
+.pytest_cache
+.coverage
+cases
+backups
+.env
+.env.*
+dashboard/frontend/node_modules
+dashboard/frontend/dist
+darkfox.sh
+onion_verifier.py
+DarkFox.desktop
+dashboard/frontend/src/assets/branding/source-logo.jpg

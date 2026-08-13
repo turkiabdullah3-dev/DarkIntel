@@ -1,0 +1,7 @@
+requests[socks]>=2.34.2,<2.35
+beautifulsoup4>=4.15,<4.16
+fastapi>=0.141.1,<0.142
+starlette>=1.6,<1.7
+pydantic>=2.13.4,<2.14
+uvicorn>=0.52.2,<0.53
+filelock>=3.18,<4

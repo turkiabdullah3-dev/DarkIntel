@@ -1,0 +1,12 @@
+export type CaseSummary = { case_id: string; name: string; description?: string; status: string; created_at: string; updated_at: string; tags: string[]; indicator_count: number; evidence_count: number; timeline_event_count: number; graph_node_count: number }
+export type Overview = { evidence: number; indicators: number; onion_targets: number; enrichment_records: number; timeline_events: number; graph_nodes: number; graph_edges: number; ioc_types: Record<string, number>; recent_events: TimelineEvent[] }
+export type CaseDetail = CaseSummary & { overview: Overview }
+export type IOC = { type: string; value: string; normalized_value: string; confidence: number; first_seen: string; observation_count: number; sources: string[]; tags: string[]; context?: string; enriched: boolean }
+export type Evidence = { evidence_id: string; source: string; url?: string; observed_at?: string; content_type?: string; status_code?: number; sha256?: string; response_time_ms?: number; error?: string }
+export type EnrichmentRecord = { provider: string; indicator_type: string; normalized_value: string; success: boolean; cached: boolean; queried_at: string; summary: Record<string, unknown>; error?: string; indicator: { type: string; normalized_value: string } }
+export type TimelineEvent = { event_id: string; event_type: string; timestamp: string; title: string; description?: string; source?: string; object_type?: string; object_value?: string; related_ids: string[]; metadata: Record<string, unknown> }
+export type GraphNode = { node_id: string; node_type: string; value: string; label: string; attributes: Record<string, unknown>; tags: string[]; source_ids: string[] }
+export type GraphEdge = { edge_id: string; source_node_id: string; target_node_id: string; relationship: string; confidence: number; provenance: string[] }
+export type GraphSummary = { total_nodes: number; total_edges: number; node_types: Record<string, number>; relationship_types: Record<string, number>; isolated_nodes: number; connected_components: number }
+export type Page<T> = { items: T[]; total: number; offset: number; limit: number }
+export type ApiError = { error: { code: string; message: string } }

@@ -1,0 +1,6 @@
+-r requirements.txt
+pytest>=9.0.3,<10
+httpx2==2.10.0
+pytest-cov>=6,<7
+bandit>=1.8,<2
+pip-audit>=2.9,<3

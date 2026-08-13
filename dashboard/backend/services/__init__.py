@@ -1,0 +1,1 @@
+"""Read-oriented dashboard services."""
