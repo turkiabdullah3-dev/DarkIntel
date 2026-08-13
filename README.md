@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="dashboard/frontend/src/assets/branding/logo.webp" alt="DarkIntel logo" width="600">
+  <img src="docs/assets/darkintel-logo-transparent.png" alt="DarkIntel logo" width="600">
 </p>
 
 <h1 align="center">DarkIntel</h1>
