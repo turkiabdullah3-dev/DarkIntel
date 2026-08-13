@@ -1,6 +1,12 @@
-# DarkIntel
+<p align="center">
+  <img src="dashboard/frontend/src/assets/branding/logo.webp" alt="DarkIntel logo" width="380">
+</p>
 
-**DarkIntel — CTI & OSINT Investigation Platform**
+<h1 align="center">DarkIntel</h1>
+
+<p align="center"><strong>CTI &amp; OSINT Investigation Platform</strong></p>
+
+<p align="center">Maintained by Turki Almuraykhi</p>
 
 DarkIntel is an independently maintained, local-first investigation platform for authorized dark-web research, evidence handling, IOC analysis, governed enrichment, timelines, and relationship graphs. It was historically inspired by the [DarkFox project by Aryan Guenthner](https://github.com/aryanguenthner/darkfox); upstream source files are not included in the DarkIntel release tree.
 
