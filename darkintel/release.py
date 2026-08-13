@@ -6,7 +6,7 @@ import re
 import shutil
 from pathlib import Path
 
-PUBLIC_DIRECTORIES = (".github", "darkintel", "dashboard", "docs", "tests")
+PUBLIC_DIRECTORIES = (".github", "darkintel", "dashboard", "docs", "packaging", "scripts", "tests")
 PUBLIC_FILES = (".dockerignore", ".env.example", ".gitignore", "CHANGELOG.md", "CONTRIBUTING.md",
                 "Dockerfile", "README.md", "SECURITY.md", "config.example.toml", "docker-compose.yml",
                 "main.py", "requirements-dev.txt", "requirements.txt", "THIRD_PARTY_NOTICES.md")
@@ -18,6 +18,7 @@ UPSTREAM_REFERENCES_ALLOWED_IN = {"README.md", "SECURITY.md", "CHANGELOG.md", "R
                                   "release.py", "test_release_hardening.py"}
 DEVELOPER_PATH = re.compile(r"(?:[A-Za-z]:\\Users\\|OneDrive[/\\]|/home/kali|/root(?:/|\\)|/opt/darkfox)")
 SECRET_PATTERN = re.compile(r"(?:BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY|authorization:\s*bearer\s+\S+)", re.I)
+PATH_REFERENCES_ALLOWED_IN = {"release.py", "test_linux_launcher.py"}
 
 
 def _excluded(path: Path) -> bool:
@@ -75,7 +76,7 @@ def validate_release_tree(root: Path) -> dict[str, object]:
         if path.suffix.lower() in {".jpg", ".png", ".webp", ".ico"}:
             continue
         text = path.read_text(encoding="utf-8", errors="replace")
-        if path.name != "release.py" and DEVELOPER_PATH.search(text):
+        if path.name not in PATH_REFERENCES_ALLOWED_IN and DEVELOPER_PATH.search(text):
             errors.append(f"developer-specific path present: {relative.as_posix()}")
         if SECRET_PATTERN.search(text):
             errors.append(f"probable secret present: {relative.as_posix()}")

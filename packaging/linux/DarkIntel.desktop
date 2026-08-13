@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=DarkIntel
+Comment=CTI & OSINT Investigation Platform
+Exec=@DARKINTEL_EXEC@
+Icon=darkintel
+Terminal=false
+Categories=Utility;Security;Development;
+StartupNotify=true
+X-DarkIntel-Managed=true

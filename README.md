@@ -515,6 +515,24 @@ GraphML is generated with the standard XML library, safely escapes hostile label
 
 Current graph limitations include no cross-process write locking, deletion/edit commands for analyst objects, temporal graph queries, advanced centrality/community analysis, signed provenance ledger, or graph database. Manual objects are trusted analyst assertions and remain clearly separated from system-generated facts.
 
+## One-click Linux Launcher
+
+On Kali Linux and other XDG-compatible desktops, install the user-local application launcher from the repository root:
+
+```bash
+./scripts/install-linux-launcher.sh
+```
+
+DarkIntel then appears in the applications menu. Clicking it checks the local `.venv`, builds the frontend only when its production output is missing or stale, starts the loopback-only dashboard, waits for the DarkIntel health endpoint, and opens `http://127.0.0.1:8000` in the default browser. A second click reuses the healthy instance instead of starting another server. Launcher logs and its managed PID are stored under `${XDG_STATE_HOME:-$HOME/.local/state}/darkintel/`.
+
+The launcher never installs dependencies as root. Create `.venv` and install the project requirements first; Node.js/npm is needed only when a frontend rebuild is required. To remove only the applications-menu integration and installed icon:
+
+```bash
+./scripts/uninstall-linux-launcher.sh
+```
+
+Uninstalling the launcher does not remove the repository, cases, evidence, or other investigation data.
+
 ## CTI investigation dashboard
 
 Phase 6 adds a separate local application layer under `dashboard/`. FastAPI exposes the existing case stores and analytical modules as a versioned, mostly read-only API; the React/TypeScript SPA presents those records without duplicating extraction, enrichment, timeline, or graph-correlation logic.

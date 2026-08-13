@@ -14,6 +14,8 @@ DarkIntel/
 ├── darkintel/
 ├── dashboard/
 ├── docs/
+├── packaging/
+├── scripts/
 ├── tests/
 ├── .dockerignore
 ├── .env.example
