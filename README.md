@@ -22,35 +22,49 @@ DarkIntel provides a case-based workspace for moving from collected evidence to 
 
 The Overview page brings the active case into one workspace, showing evidence totals, extracted IOCs, enrichment activity, timeline events, graph statistics, and recent investigation activity.
 
-![Annotated DarkIntel synthetic case overview](docs/kali-validation/screenshots/overview-annotated-en.png)
+<p align="center">
+  <a href="docs/kali-validation/screenshots/overview-annotated-en.png">
+    <img src="docs/kali-validation/screenshots/overview-annotated-en.png" alt="Annotated DarkIntel synthetic case overview" width="100%">
+  </a>
+</p>
 
 ## Interface Walkthrough
 
-The annotated views below explain the main analyst workflow. Original, unannotated validation captures remain preserved in the [full Kali Linux validation report](docs/kali-validation/README.md).
+Click any image to open the full-resolution walkthrough.
 
-### Case Registry
+<table>
+  <tr>
+    <td width="50%" align="center">
+      <a href="docs/kali-validation/screenshots/case-registry-annotated-en.png">
+        <img src="docs/kali-validation/screenshots/case-registry-annotated-en.png" alt="Annotated DarkIntel Case Registry">
+      </a>
+      <br><strong>Case Registry</strong>
+    </td>
+    <td width="50%" align="center">
+      <a href="docs/kali-validation/screenshots/indicators-annotated-en.png">
+        <img src="docs/kali-validation/screenshots/indicators-annotated-en.png" alt="Annotated DarkIntel Indicators view">
+      </a>
+      <br><strong>Indicators</strong>
+    </td>
+  </tr>
+</table>
 
-Browse local investigation workspaces, review their evidence and indicator totals, and open the selected synthetic case.
-
-![Annotated DarkIntel Case Registry](docs/kali-validation/screenshots/case-registry-annotated-en.png)
-
-### Indicators
-
-Review normalized IOCs with extraction confidence, observation counts, provenance, and enrichment status. Confidence describes extraction validity—not threat severity.
-
-![Annotated DarkIntel Indicators view](docs/kali-validation/screenshots/indicators-annotated-en.png)
-
-### Relationship Graph
-
-Explore provenance-backed relationships between evidence, indicators, enrichment records, events, and analyst findings, with filters and an accessible table fallback.
-
-![Annotated DarkIntel Relationship Graph](docs/kali-validation/screenshots/graph-annotated-en.png)
+<p align="center">
+  <a href="docs/kali-validation/screenshots/graph-annotated-en.png">
+    <img src="docs/kali-validation/screenshots/graph-annotated-en.png" alt="Annotated DarkIntel Relationship Graph" width="100%">
+  </a>
+  <br><strong>Relationship Graph</strong>
+</p>
 
 ## DarkIntel Investigation Workflow
 
 This explanatory concept map summarizes the typical path from opening a case through evidence review, IOC analysis, enrichment, graph correlation, and findings. It is documentation artwork, not runtime validation evidence.
 
-![DarkIntel investigation workflow concept map](docs/kali-validation/darkintel-concept-map.png)
+<p align="center">
+  <a href="docs/kali-validation/darkintel-concept-map.png">
+    <img src="docs/kali-validation/darkintel-concept-map.png" alt="DarkIntel investigation workflow concept map" width="100%">
+  </a>
+</p>
 
 ## Kali Linux Validation
 
