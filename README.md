@@ -229,7 +229,7 @@ cases/CASE-YYYY-NNNN/extracted_iocs/indicators.json
 cases/CASE-YYYY-NNNN/extracted_iocs/indicators.csv
 ```
 
-JSON is canonical. CSV contains type, original and normalized values, confidence, source, first-seen time, bounded context, tags, observation count, and sources.
+JSON is canonical. CSV contains type, original and normalized values, confidence, source, first-seen time, bounded context, tags, observation count, and sources. As an export-only safety transformation, every CSV field whose first non-whitespace character is `=`, `+`, `-`, or `@` receives a leading apostrophe. Canonical JSON and IOC extraction/normalization values remain unchanged.
 
 For HTML evidence, DarkIntel removes script, style, noscript, and template elements, extracts visible text and anchor `href` strings, and performs no rendering or resource loading. Malformed HTML is handled by BeautifulSoup's local parser.
 
@@ -401,7 +401,7 @@ Default display is concise and does not dump metadata.
 - Metadata: bounded depth and collection sizes, 2,000-character values, and approximately 16 KiB per event. Oversized metadata is reduced with a SHA-256 reference to its bounded representation.
 - Case IDs reuse strict `CASE-YYYY-NNNN` validation; artifact-provided source strings are labels and are never resolved as filesystem paths.
 - JSON parsing uses standard safe deserialization and malformed source records are isolated with bounded warnings.
-- CSV fields whose first non-whitespace character is `=`, `+`, `-`, or `@` receive a leading apostrophe to prevent spreadsheet formula execution.
+- Timeline and IOC CSV fields whose first non-whitespace character is `=`, `+`, `-`, or `@` receive a leading apostrophe to prevent spreadsheet formula execution.
 - Markdown escapes HTML angle brackets and code delimiters to reduce future rendering injection risk.
 - Timeline building performs no provider calls, URL visits, DNS lookups, shell execution, or other network access.
 
@@ -570,7 +570,9 @@ cd ../..
 python main.py dashboard
 ```
 
-FastAPI serves the built SPA with deep-link fallback while preserving `/api`, `/docs`, and `/openapi.json`. The default bind is `127.0.0.1:8000`; an explicit public bind prints a warning because authentication is not implemented.
+FastAPI serves the built SPA with deep-link fallback while preserving `/api`, `/docs`, and `/openapi.json`. The supported CLI defaults to `127.0.0.1:8000` and accepts `localhost`, `127.0.0.1`, and `::1` without extra flags. Every other IP literal or hostname is rejected by default without performing DNS resolution.
+
+DarkIntel is local-first and unauthenticated. A deliberate non-loopback bind requires `--allow-non-loopback` and emits a strong warning; for example, `python main.py dashboard --host 192.168.1.23 --allow-non-loopback`. This override does not add authentication, authorization, TLS, or any other protection. Directly invoking Uvicorn bypasses the CLI guard, so keep direct development binds on loopback.
 
 ### Offline demo, backup, and integrity
 
@@ -602,7 +604,7 @@ The API is rooted at `/api/v1`. It provides case list/detail/overview and bounde
 
 ### Local-only security model
 
-Authentication is not implemented. The documented and configured default is `127.0.0.1`, not a public bind. CORS permits only the two local Vite origins and does not allow credentials. Case IDs are validated before filesystem access, responses omit arbitrary filesystem paths and evidence bodies, and normal page loads never contact enrichment providers. React renders case and artifact values as hostile text: collected HTML and provider-controlled markup are never injected into the DOM. API failures return structured messages without stack traces.
+Authentication is not implemented. The documented and configured default is `127.0.0.1`; the supported CLI rejects non-loopback and unrecognized hostname binds unless the operator supplies the explicit unsafe override. CORS permits only the two local Vite origins and does not allow credentials. Case IDs are validated before filesystem access, responses omit arbitrary filesystem paths and evidence bodies, and normal page loads never contact enrichment providers. React renders case and artifact values as hostile text: collected HTML and provider-controlled markup are never injected into the DOM. API failures return structured messages without stack traces.
 
 Do not expose this service to a network without a separately designed authentication, authorization, TLS, and deployment-hardening phase.
 
