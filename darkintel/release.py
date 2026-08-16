@@ -5,11 +5,19 @@ from __future__ import annotations
 import re
 import shutil
 from pathlib import Path
+from typing import TypedDict
+
+
+class ReleaseValidation(TypedDict):
+    valid: bool
+    files_checked: int
+    errors: list[str]
 
 PUBLIC_DIRECTORIES = (".github", "darkintel", "dashboard", "docs", "packaging", "scripts", "tests")
-PUBLIC_FILES = (".dockerignore", ".env.example", ".gitignore", "CHANGELOG.md", "CONTRIBUTING.md",
-                "Dockerfile", "README.md", "SECURITY.md", "config.example.toml", "docker-compose.yml",
-                "main.py", "requirements-dev.txt", "requirements.txt", "THIRD_PARTY_NOTICES.md")
+PUBLIC_FILES = (".dockerignore", ".env.example", ".gitignore", ".secrets.baseline", "AGENTS.md",
+                "CHANGELOG.md", "CLAUDE.md", "CONTRIBUTING.md", "Dockerfile", "README.md",
+                "SECURITY.md", "config.example.toml", "docker-compose.yml", "main.py", "pyproject.toml",
+                "requirements-dev.txt", "requirements.txt", "THIRD_PARTY_NOTICES.md")
 EXCLUDED_NAMES = {"darkfox.sh", "onion_verifier.py", "DarkFox.desktop", ".env", "cases", "backups",
                   "node_modules", "__pycache__", ".pytest_cache", "dist", "source-logo.jpg"}
 EXCLUDED_SUFFIXES = (".pyc", ".pyo", ".tsbuildinfo", ".lock")
@@ -58,7 +66,7 @@ def export_release_tree(source: Path, output: Path) -> dict[str, object]:
     return {"output": str(output), "files": len(copied), **report}
 
 
-def validate_release_tree(root: Path) -> dict[str, object]:
+def validate_release_tree(root: Path) -> ReleaseValidation:
     root = root.resolve()
     errors: list[str] = []
     checked = 0

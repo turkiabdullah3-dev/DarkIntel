@@ -34,4 +34,4 @@ def test_onion_reuses_strict_v3_validation():
 
 
 def test_url_does_not_execute_or_accept_credentials():
-    assert values("http://user:pass@example.com/x", IOCType.URL) == []
+    assert values("http://user:pass@example.com/x", IOCType.URL) == []  # pragma: allowlist secret

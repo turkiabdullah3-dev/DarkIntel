@@ -9,6 +9,7 @@ import logging
 import os
 from pathlib import Path
 import sys
+from typing import cast
 
 from bs4 import BeautifulSoup
 
@@ -30,6 +31,31 @@ from darkintel.demo import create_demo
 from darkintel.release import export_release_tree
 
 LOGGER = logging.getLogger("darkintel")
+
+
+def is_loopback_bind_host(host: str) -> bool:
+    """Classify bind targets without DNS resolution; unknown hostnames fail closed."""
+    candidate = host.strip()
+    if candidate.lower() == "localhost":
+        return True
+    try:
+        return ipaddress.ip_address(candidate).is_loopback
+    except ValueError:
+        return False
+
+
+def validate_dashboard_bind(host: str, allow_non_loopback: bool = False) -> None:
+    if is_loopback_bind_host(host):
+        return
+    if not allow_non_loopback:
+        raise ValueError(
+            "dashboard host must be loopback because authentication is not implemented; "
+            "use --allow-non-loopback only after accepting the network exposure risk"
+        )
+    LOGGER.warning(
+        "DANGER: Dashboard is binding beyond loopback. Authentication is not implemented; "
+        "case, evidence, and intelligence data may be exposed to other hosts."
+    )
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -153,6 +179,10 @@ def build_parser() -> argparse.ArgumentParser:
     dashboard = sub.add_parser("dashboard", help="serve the local API and built dashboard")
     dashboard.add_argument("--host", default="127.0.0.1")
     dashboard.add_argument("--port", default=8000, type=int)
+    dashboard.add_argument(
+        "--allow-non-loopback", action="store_true",
+        help="permit an unauthenticated non-loopback bind after accepting the exposure risk",
+    )
     demo = sub.add_parser("demo", help="manage fully synthetic offline demo data")
     demo_sub = demo.add_subparsers(dest="demo_command", required=True)
     demo_sub.add_parser("create")
@@ -284,7 +314,8 @@ def _enrich(args: argparse.Namespace, store: CaseStore) -> int:
     print("Enrichment Complete\n")
     print(f"Indicators processed: {summary['indicators_processed']}")
     for name in selected_providers:
-        stats = summary["providers"].get(name, {})
+        provider_stats = cast(dict[str, object], summary["providers"])
+        stats = cast(dict[str, int], provider_stats.get(name, {}))
         print(f"{name:14} {stats.get('success', 0)} success / {stats.get('failed', 0)} failed / "
               f"{stats.get('cached', 0)} cached / {stats.get('unsupported', 0)} unsupported")
     print(f"\nNetwork requests: {summary['network_requests']}")
@@ -363,10 +394,10 @@ def _graph(args: argparse.Namespace, store: CaseStore) -> int:
     print(f"Relationship Graph\n{args.case_id}\n")
     print(f"Nodes: {summary['total_nodes']}\nEdges: {summary['total_edges']}\n")
     print("Node types:")
-    for kind, count in summary["node_types"].items():
+    for kind, count in cast(dict[str, int], summary["node_types"]).items():
         print(f"  {kind:20} {count}")
     print("\nRelationships:")
-    for relationship, count in summary["relationship_types"].items():
+    for relationship, count in cast(dict[str, int], summary["relationship_types"]).items():
         print(f"  {relationship:20} {count}")
     return 0
 
@@ -379,12 +410,7 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "dashboard":
             if not 1 <= args.port <= 65535:
                 raise ValueError("dashboard port must be between 1 and 65535")
-            try:
-                public_bind = ipaddress.ip_address(args.host).is_unspecified
-            except ValueError:
-                public_bind = False
-            if public_bind:
-                LOGGER.warning("Dashboard is being exposed beyond loopback; authentication is not implemented.")
+            validate_dashboard_bind(args.host, args.allow_non_loopback)
             cases_root = Path(args.cases_dir)
             cases_root.mkdir(parents=True, exist_ok=True)
             if not cases_root.is_dir():

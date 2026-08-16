@@ -30,7 +30,8 @@ class AbuseIPDBProvider(HTTPSProvider):
                       "totalReports", "lastReportedAt")
             names = ("abuse_confidence_score", "country_code", "usage_type", "isp", "domain",
                      "total_reports", "last_reported_at")
-            summary = {target: data[source] for source, target in zip(fields, names) if source in data}
+            summary = {target: data[source] for source, target in zip(fields, names, strict=True)
+                       if source in data}
             confidence = data.get("abuseConfidenceScore")
             provider_confidence = confidence / 100 if isinstance(confidence, (int, float)) else None
             return EnrichmentRecord(provider=self.name, indicator_type=indicator.type.value,

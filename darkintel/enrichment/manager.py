@@ -29,7 +29,7 @@ class EnrichmentManager:
         self.request_counts = {name: 0 for name in self.providers}
         self.cache_hits = 0
         for provider in provider_list:
-            if provider.requires_network and hasattr(provider, "max_requests_for_run"):
+            if provider.requires_network:
                 provider.max_requests_for_run = policy.max_requests_per_provider
 
     def enrich_indicator(self, indicator: IOC, providers: list[str] | None = None) -> EnrichmentResult:
@@ -63,9 +63,9 @@ class EnrichmentManager:
                                                    "Per-run provider request limit reached"))
                 warnings.append(f"Request limit reached for provider: {name}")
                 continue
+            has_request_counter = hasattr(provider, "requests_made")
+            before = int(getattr(provider, "requests_made", 0))
             try:
-                has_request_counter = hasattr(provider, "requests_made")
-                before = int(getattr(provider, "requests_made", 0))
                 provider_indicator = self._minimal_network_indicator(indicator) if provider.requires_network else indicator
                 record = provider.enrich(provider_indicator)
             except Exception as exc:  # provider boundary isolation

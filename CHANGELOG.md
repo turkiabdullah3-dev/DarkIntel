@@ -6,6 +6,7 @@ This unreleased work establishes **DarkIntel — CTI & OSINT Investigation Platf
 
 ### Added
 
+- Repository guidance for coding and review agents, plus reproducible Ruff, Pyright, and secret-scanning quality gates.
 - Modular case, collection, IOC, enrichment, timeline, relationship-graph, and local dashboard layers.
 - Atomic JSON persistence, bounded cross-process locks, case backups, integrity verification, and a synthetic offline demo.
 - Production SPA serving, health reporting, security headers, CI, security audits, and container packaging.
@@ -18,5 +19,7 @@ This unreleased work establishes **DarkIntel — CTI & OSINT Investigation Platf
 
 ### Security
 
+- Neutralized spreadsheet formula/DDE triggers across all IOC CSV fields while preserving canonical JSON values.
+- Rejected non-loopback dashboard binds by default and required an explicit warning-producing unsafe override.
 - Loopback dashboard defaults, restricted development CORS, hostile-string rendering, bounded queries, atomic writes, path validation, and non-root container execution.
 - Redistribution and relicensing remain blocked pending confirmation of the missing upstream license file.

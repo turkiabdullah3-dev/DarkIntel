@@ -1,6 +1,8 @@
 import csv
 import json
 
+import pytest
+
 from darkintel.cases import CaseStore
 from darkintel.evidence import IOCStore
 from darkintel.extractors.base import Candidate
@@ -66,6 +68,58 @@ def test_case_level_deduplication_json_and_csv(tmp_path):
         rows = list(csv.DictReader(handle))
     assert rows[0]["normalized_value"] == "example.com"
     assert rows[0]["observation_count"] == "2"
+
+
+@pytest.mark.parametrize("context", [
+    "=1+1",
+    "+cmd",
+    "-HYPERLINK(\"https://example.test\", \"open\")",
+    "@SUM(A1:A3)",
+    "   =HYPERLINK(\"https://example.test\", \"open\")",
+])
+def test_ioc_csv_neutralizes_formula_context_without_changing_json(tmp_path, context):
+    case = CaseStore(tmp_path).create_case("CSV formula safety")
+    store = IOCStore(tmp_path)
+    indicator = IOC(IOCType.DOMAIN, "example.test", "example.test", source="evidence.txt",
+                    context=context)
+    store.merge(case.case_id, ExtractionResult("evidence.txt", [indicator]))
+    directory = tmp_path / case.case_id / "extracted_iocs"
+
+    payload = json.loads((directory / "indicators.json").read_text(encoding="utf-8"))
+    assert payload["indicators"][0]["context"] == context
+    with (directory / "indicators.csv").open(encoding="utf-8", newline="") as handle:
+        row = next(csv.DictReader(handle))
+    assert row["context"] == "'" + context
+
+
+def test_ioc_csv_preserves_benign_unicode_quoting_and_neutralizes_all_string_fields(tmp_path):
+    case = CaseStore(tmp_path).create_case("CSV field safety")
+    store = IOCStore(tmp_path)
+    benign_context = "ملاحظة Unicode, café\nsecond line"
+    benign = IOC(IOCType.DOMAIN, "example.test", "example.test", source="evidence.txt",
+                 context=benign_context)
+    hostile = IOC(IOCType.DOMAIN, "=value", "+normalized", source="-source",
+                  context="@context", tags=["   =tag"], sources=["+additional"])
+    store.merge(case.case_id, ExtractionResult("evidence.txt", [benign, hostile]))
+    directory = tmp_path / case.case_id / "extracted_iocs"
+
+    payload = json.loads((directory / "indicators.json").read_text(encoding="utf-8"))
+    stored = {item["normalized_value"]: item for item in payload["indicators"]}
+    assert stored["example.test"]["context"] == benign_context
+    assert stored["+normalized"]["value"] == "=value"
+    assert stored["+normalized"]["source"] == "-source"
+    assert stored["+normalized"]["tags"] == ["   =tag"]
+
+    with (directory / "indicators.csv").open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+    exported = {row["normalized_value"]: row for row in rows}
+    assert exported["example.test"]["context"] == benign_context
+    hostile_row = next(row for row in rows if row["value"] == "'=value")
+    assert hostile_row["normalized_value"] == "'+normalized"
+    assert hostile_row["source"] == "'-source"
+    assert hostile_row["context"] == "'@context"
+    assert hostile_row["tags"] == "'   =tag"
+    assert hostile_row["sources"] == "'+additional;-source"
 
 
 def test_cli_extracts_malformed_html_without_scripts_or_network(tmp_path, capsys):

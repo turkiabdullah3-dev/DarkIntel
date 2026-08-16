@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 import json
 import ipaddress
 import time
-from typing import Any, Callable
+from typing import Any, Callable, overload
 from urllib.parse import urljoin, urlsplit
 
 import requests
@@ -15,6 +15,14 @@ from ..models import EnrichmentRecord, IOC
 
 MAX_PROVIDER_RESPONSE_BYTES = 1_000_000
 MAX_SUMMARY_STRING_CHARS = 500
+
+
+@overload
+def bound_summary(value: dict[str, object], depth: int = 0) -> dict[str, object]: ...
+
+
+@overload
+def bound_summary(value: Any, depth: int = 0) -> object: ...
 
 
 def bound_summary(value: Any, depth: int = 0) -> object:
@@ -44,6 +52,7 @@ class EnrichmentProvider(ABC):
     name: str
     supported_types: frozenset[str]
     requires_network: bool = False
+    max_requests_for_run: int | None = None
 
     def supports(self, indicator: IOC) -> bool:
         return indicator.type.value in self.supported_types
@@ -81,7 +90,8 @@ class HTTPSProvider(EnrichmentProvider):
         self._last_request_at = None
 
     def _get_json(self, url: str, *, headers: dict[str, str] | None = None,
-                  params: dict[str, object] | None = None, _redirects: int = 0) -> dict[str, Any]:
+                  params: dict[str, str | int | float | bool | None] | None = None,
+                  _redirects: int = 0) -> dict[str, Any]:
         parsed = urlsplit(url)
         approved_redirect = _redirects > 0 and self.allow_external_https_redirects and self._safe_redirect_host(parsed.hostname)
         if parsed.scheme != "https" or (parsed.hostname not in self.allowed_hosts and not approved_redirect):

@@ -14,6 +14,14 @@ from filelock import FileLock
 SAFE_CASE_ID = re.compile(r"^CASE-\d{4}-\d{4}$")
 
 
+def csv_safe(value: object) -> str:
+    """Neutralize spreadsheet formulas without changing canonical source data."""
+    text = "" if value is None else str(value)
+    if text.lstrip().startswith(("=", "+", "-", "@")):
+        return "'" + text
+    return text
+
+
 def validate_case_id(case_id: str) -> str:
     if not isinstance(case_id, str) or not SAFE_CASE_ID.fullmatch(case_id):
         raise ValueError("case ID must match CASE-YYYY-NNNN")

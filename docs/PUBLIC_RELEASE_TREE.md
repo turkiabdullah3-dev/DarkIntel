@@ -20,7 +20,10 @@ DarkIntel/
 ├── .dockerignore
 ├── .env.example
 ├── .gitignore
+├── .secrets.baseline
+├── AGENTS.md
 ├── CHANGELOG.md
+├── CLAUDE.md
 ├── CONTRIBUTING.md
 ├── Dockerfile
 ├── README.md
@@ -29,6 +32,7 @@ DarkIntel/
 ├── config.example.toml
 ├── docker-compose.yml
 ├── main.py
+├── pyproject.toml
 ├── requirements.txt
 └── requirements-dev.txt
 ```

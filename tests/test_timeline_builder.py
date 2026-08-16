@@ -1,4 +1,3 @@
-import json
 
 from darkintel.cases import CaseStore
 from darkintel.timeline.builder import TimelineBuilder

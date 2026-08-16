@@ -36,8 +36,8 @@ def export_graphml(nodes: list[GraphNode], edges: list[GraphEdge]) -> str:
                                  ("relationship", "edge", "relationship"),
                                  ("confidence", "edge", "confidence"),
                                  ("provenance", "edge", "provenance")):
-        ET.SubElement(root, f"{{{namespace}}}key", id=key_id, **{"for": target, "attr.name": name,
-                                                                  "attr.type": "string"})
+        ET.SubElement(root, f"{{{namespace}}}key",
+                      {"id": key_id, "for": target, "attr.name": name, "attr.type": "string"})
     graph = ET.SubElement(root, f"{{{namespace}}}graph", id="G", edgedefault="directed")
     for node in sorted(nodes, key=lambda item: item.node_id):
         element = ET.SubElement(graph, f"{{{namespace}}}node", id=node.node_id)

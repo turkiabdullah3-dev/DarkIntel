@@ -22,7 +22,7 @@ def test_valid_url_normalization(value, expected):
     ("https://example.com", "valid 56-character"),
     ("http://short.onion", "valid 56-character"),
     (f"ftp://{HOST}", "only http and https"),
-    (f"http://user:pass@{HOST}", "credentials"),
+    (f"http://user:pass@{HOST}", "credentials"),  # pragma: allowlist secret
     ("http://[broken", "malformed"),
 ])
 def test_invalid_urls(value, message):

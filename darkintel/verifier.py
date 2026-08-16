@@ -6,6 +6,7 @@ import hashlib
 import logging
 import re
 from time import perf_counter
+from typing import Any
 from urllib.parse import urlsplit, urlunsplit
 
 from bs4 import BeautifulSoup
@@ -117,6 +118,6 @@ class OnionVerifier:
                                error=f"{type(exc).__name__}: {exc}", observed_at=observed_at)
 
 
-def verify_onion(value: str, **kwargs: object) -> OnionResult:
+def verify_onion(value: str, **kwargs: Any) -> OnionResult:
     """Convenience wrapper for one verification."""
     return OnionVerifier(**kwargs).verify(value)

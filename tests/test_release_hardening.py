@@ -23,6 +23,8 @@ def test_public_release_export_excludes_upstream_and_runtime_artifacts(tmp_path)
     report = export_release_tree(source, output)
     assert report["valid"] is True
     assert (output / "docs" / "UPSTREAM_PROVENANCE.md").is_file()
+    for name in ("AGENTS.md", "CLAUDE.md", "pyproject.toml", ".secrets.baseline"):
+        assert (output / name).is_file()
     for name in ("darkfox.sh", "onion_verifier.py", "DarkFox.desktop", "source-logo.jpg"):
         assert not list(output.rglob(name))
     for name in ("cases", "backups", "node_modules", "__pycache__", "dist"):
@@ -102,7 +104,8 @@ def test_backup_detects_tampering_and_traversal(tmp_path):
 def test_backup_skips_symlink(tmp_path):
     root = tmp_path / "cases"
     case = CaseStore(root).create_case("Symlink test")
-    outside = tmp_path / "secret.txt"; outside.write_text("secret", encoding="utf-8")
+    outside = tmp_path / "secret.txt"
+    outside.write_text("secret", encoding="utf-8")
     link = root / case.case_id / "evidence" / "outside.txt"
     try:
         link.symlink_to(outside)

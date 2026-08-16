@@ -13,8 +13,8 @@ enabled = false
 
 [providers.virustotal]
 enabled = false
-api_key_environment = "DARKINTEL_VT_API_KEY"
+api_key_environment = "DARKINTEL_VT_API_KEY" # pragma: allowlist secret
 
 [providers.abuseipdb]
 enabled = false
-api_key_environment = "DARKINTEL_ABUSEIPDB_API_KEY"
+api_key_environment = "DARKINTEL_ABUSEIPDB_API_KEY" # pragma: allowlist secret

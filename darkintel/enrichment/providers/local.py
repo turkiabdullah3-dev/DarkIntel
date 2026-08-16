@@ -7,7 +7,7 @@ import re
 
 from ..base import EnrichmentProvider
 from ...models import EnrichmentRecord, IOC
-from ...verifier import OnionValidationError, normalize_onion_url
+from ...verifier import normalize_onion_url
 
 
 class LocalProvider(EnrichmentProvider):

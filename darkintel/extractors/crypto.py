@@ -8,7 +8,7 @@ import re
 from .base import Candidate
 from ..models import IOCType
 
-BASE58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+BASE58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"  # pragma: allowlist secret
 BTC_BASE58_RE = re.compile(r"(?<![A-Za-z0-9])[13][1-9A-HJ-NP-Za-km-z]{25,34}(?![A-Za-z0-9])")
 BTC_BECH32_RE = re.compile(r"(?i)(?<![a-z0-9])bc1[ac-hj-np-z02-9]{11,71}(?![a-z0-9])")
 MONERO_RE = re.compile(r"(?<![1-9A-HJ-NP-Za-km-z])[48][1-9A-HJ-NP-Za-km-z]{94}(?![1-9A-HJ-NP-Za-km-z])")
@@ -46,7 +46,7 @@ def _bech32_valid(value: str) -> bool:
         return False
     value = value.lower()
     separator = value.rfind("1")
-    charset = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
+    charset = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"  # pragma: allowlist secret
     if separator < 1 or separator + 7 > len(value) or len(value) > 90:
         return False
     try:

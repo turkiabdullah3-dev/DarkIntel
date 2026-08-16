@@ -5,6 +5,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 import logging
 from pathlib import Path
+from typing import Any
 
 from filelock import FileLock
 
@@ -104,7 +105,7 @@ def list_cases(root: str | Path = "cases") -> list[InvestigationCase]:
     return CaseStore(root).list_cases()
 
 
-def update_case(case_id: str, root: str | Path = "cases", **changes: object) -> InvestigationCase:
+def update_case(case_id: str, root: str | Path = "cases", **changes: Any) -> InvestigationCase:
     return CaseStore(root).update_case(case_id, **changes)
 
 
