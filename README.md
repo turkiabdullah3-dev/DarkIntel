@@ -4,13 +4,34 @@
 
 <h1 align="center">DarkIntel</h1>
 
-<p align="center"><strong>CTI &amp; OSINT Investigation Platform</strong></p>
+<p align="center"><strong>Local-first CTI &amp; OSINT investigation platform for evidence analysis, IOC enrichment, timelines, and relationship graphs.</strong></p>
 
 <p align="center">Maintained by Turki Almuraykhi</p>
 
 DarkIntel is an independently maintained, local-first investigation platform for authorized dark-web research, evidence handling, IOC analysis, governed enrichment, timelines, and relationship graphs. It was historically inspired by the [DarkFox project by Aryan Guenthner](https://github.com/aryanguenthner/darkfox); upstream source files are not included in the DarkIntel release tree.
 
 > Use DarkIntel only for lawful, authorized CTI, OSINT, DFIR, academic, or security research. It does not provide exploitation, credential collection, persistence, payload delivery, or offensive automation.
+
+## What DarkIntel Does
+
+DarkIntel provides a case-based workspace for moving from collected evidence to reviewable analyst findings while preserving provenance and keeping network enrichment explicit.
+
+**Evidence → IOC Extraction → Enrichment → Timeline → Relationship Graph → Findings**
+
+![Annotated DarkIntel synthetic case overview](docs/kali-validation/screenshots/overview-annotated-en.png)
+
+## Kali Linux Validation
+
+DarkIntel has been exercised on Kali Linux using a deterministic synthetic investigation case. The retained validation package covers:
+
+- Python core checks and test suite
+- React dashboard validation
+- Tor SOCKS listener connectivity
+- Loopback-only dashboard operation
+- Linux desktop launcher behavior
+- IOC and relationship-graph workflow
+
+[View the full Kali Linux validation report](docs/kali-validation/README.md).
 
 ## Architecture
 
