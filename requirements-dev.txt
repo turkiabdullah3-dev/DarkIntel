@@ -4,3 +4,6 @@ httpx2==2.10.0
 pytest-cov>=6,<7
 bandit>=1.8,<2
 pip-audit>=2.9,<3
+ruff>=0.12,<1
+pyright>=1.1.400,<2
+detect-secrets>=1.5,<2

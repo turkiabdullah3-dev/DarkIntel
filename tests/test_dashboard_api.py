@@ -1,4 +1,3 @@
-from datetime import datetime, timezone
 
 import pytest
 from fastapi.testclient import TestClient
@@ -40,7 +39,8 @@ def dashboard(tmp_path):
     edge = GraphEdge.generated(case.case_id, domain.node_id, case_node.node_id,
         GraphRelationship.BELONGS_TO_CASE, 1, ["case.json"])
     GraphStore(root).save(GraphResult(case.case_id, [case_node, domain], [edge]))
-    app = create_app(); app.dependency_overrides[cases_root] = lambda: root
+    app = create_app()
+    app.dependency_overrides[cases_root] = lambda: root
     return TestClient(app, raise_server_exceptions=False), case.case_id, root, domain.node_id, case_node.node_id
 
 

@@ -4,11 +4,10 @@ from __future__ import annotations
 
 from collections import Counter, deque
 from pathlib import Path
-import json
 import logging
 
 from .correlation import merge_edges, validate_graph
-from .exporters import export_cytoscape, export_graphml, export_json
+from .exporters import export_cytoscape, export_graphml
 from .models import GraphEdge, GraphNode, GraphNodeType, GraphRelationship, GraphResult
 from ..models import utc_now
 from ..utils import read_json, validate_case_id, write_json

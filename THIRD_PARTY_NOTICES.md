@@ -23,6 +23,9 @@ DarkIntel uses the following direct dependencies. Versions are the audited insta
 | Bandit | 1.9.4 | Apache-2.0 | PyPI |
 | pip-audit | 2.10.1 | Apache-2.0 | PyPI metadata classifier |
 | httpx2 | 2.10.0 | BSD-3-Clause | PyPI |
+| Ruff | 0.16.3 | MIT | PyPI |
+| Pyright | 1.1.411 | MIT | PyPI |
+| detect-secrets | 1.5.0 | Apache-2.0 | PyPI metadata classifier |
 
 ## Frontend runtime
 

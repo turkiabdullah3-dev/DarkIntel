@@ -8,6 +8,8 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: '3.11', cache: pip}
       - run: python -m pip install -r requirements.txt -r requirements-dev.txt
+      - run: detect-secrets scan --all-files --exclude-files '(\.git|\.venv|\.ruff_cache|\.pytest_cache|__pycache__|node_modules|dist|coverage|\.tsbuildinfo)' --baseline .secrets.baseline
+      - run: git diff --exit-code -- .secrets.baseline
       - run: python -m pip_audit -r requirements.txt
       - run: python -m bandit -r darkintel dashboard/backend main.py
   frontend-audit:

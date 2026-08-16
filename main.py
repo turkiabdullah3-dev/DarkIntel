@@ -9,6 +9,7 @@ import logging
 import os
 from pathlib import Path
 import sys
+from typing import cast
 
 from bs4 import BeautifulSoup
 
@@ -284,7 +285,8 @@ def _enrich(args: argparse.Namespace, store: CaseStore) -> int:
     print("Enrichment Complete\n")
     print(f"Indicators processed: {summary['indicators_processed']}")
     for name in selected_providers:
-        stats = summary["providers"].get(name, {})
+        provider_stats = cast(dict[str, object], summary["providers"])
+        stats = cast(dict[str, int], provider_stats.get(name, {}))
         print(f"{name:14} {stats.get('success', 0)} success / {stats.get('failed', 0)} failed / "
               f"{stats.get('cached', 0)} cached / {stats.get('unsupported', 0)} unsupported")
     print(f"\nNetwork requests: {summary['network_requests']}")
@@ -363,10 +365,10 @@ def _graph(args: argparse.Namespace, store: CaseStore) -> int:
     print(f"Relationship Graph\n{args.case_id}\n")
     print(f"Nodes: {summary['total_nodes']}\nEdges: {summary['total_edges']}\n")
     print("Node types:")
-    for kind, count in summary["node_types"].items():
+    for kind, count in cast(dict[str, int], summary["node_types"]).items():
         print(f"  {kind:20} {count}")
     print("\nRelationships:")
-    for relationship, count in summary["relationship_types"].items():
+    for relationship, count in cast(dict[str, int], summary["relationship_types"]).items():
         print(f"  {relationship:20} {count}")
     return 0
 

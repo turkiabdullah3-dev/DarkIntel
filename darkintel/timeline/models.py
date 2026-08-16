@@ -143,7 +143,7 @@ class TimelineEvent:
     def analyst_note(cls, *, case_id: str, timestamp: str | datetime, title: str,
                      description: str | None = None, tags: list[str] | None = None) -> "TimelineEvent":
         normalized, original_zone = parse_timestamp(timestamp)
-        metadata = {"manual": True}
+        metadata: dict[str, object] = {"manual": True}
         if original_zone:
             metadata["original_timestamp"] = original_zone
         return cls(str(uuid.uuid4()), case_id, TimelineEventType.ANALYST_NOTE, normalized, title,

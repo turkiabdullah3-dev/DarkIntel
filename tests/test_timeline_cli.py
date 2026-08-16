@@ -1,5 +1,4 @@
 from darkintel.cases import CaseStore
-from darkintel.timeline.models import TimelineEventType
 from darkintel.utils import write_json
 from main import main
 

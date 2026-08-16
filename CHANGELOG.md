@@ -6,6 +6,7 @@ This unreleased work establishes **DarkIntel — CTI & OSINT Investigation Platf
 
 ### Added
 
+- Repository guidance for coding and review agents, plus reproducible Ruff, Pyright, and secret-scanning quality gates.
 - Modular case, collection, IOC, enrichment, timeline, relationship-graph, and local dashboard layers.
 - Atomic JSON persistence, bounded cross-process locks, case backups, integrity verification, and a synthetic offline demo.
 - Production SPA serving, health reporting, security headers, CI, security audits, and container packaging.
