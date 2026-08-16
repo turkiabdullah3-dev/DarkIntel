@@ -6,18 +6,11 @@ import csv
 import io
 import json
 
+from ..utils import csv_safe
 from .models import TimelineEvent, sort_events
 
 CSV_FIELDS = ("event_id", "timestamp", "event_type", "title", "object_type", "object_value",
               "source", "description", "tags")
-
-
-def csv_safe(value: object) -> str:
-    text = "" if value is None else str(value)
-    if text.lstrip().startswith(("=", "+", "-", "@")):
-        return "'" + text
-    return text
-
 
 def export_json(events: list[TimelineEvent]) -> str:
     return json.dumps({"events": [event.to_dict() for event in sort_events(events)]},

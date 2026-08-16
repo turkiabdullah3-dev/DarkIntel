@@ -10,7 +10,7 @@ from pathlib import Path
 import re
 
 from .models import ExtractionResult, IOC, OnionResult
-from .utils import atomic_write_text, read_json, validate_case_id, write_json
+from .utils import atomic_write_text, csv_safe, read_json, validate_case_id, write_json
 
 LOGGER = logging.getLogger(__name__)
 
@@ -99,11 +99,12 @@ class IOCStore:
         writer.writeheader()
         for indicator in indicators:
             data = indicator.to_dict()
-            writer.writerow({
+            row = {
                 "type": data["type"], "value": data["value"],
                 "normalized_value": data["normalized_value"], "confidence": data["confidence"],
                 "source": data["source"] or "", "first_seen": data["first_seen"],
                 "context": data["context"] or "", "tags": ";".join(data["tags"]),
                 "observation_count": data["observation_count"], "sources": ";".join(data["sources"]),
-            })
+            }
+            writer.writerow({field: csv_safe(row[field]) for field in self.CSV_FIELDS})
         atomic_write_text(path, handle.getvalue())
